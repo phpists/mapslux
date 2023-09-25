@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./assets/styles/styles.css" />
+  </head>
+  <body style="display: flex">
+    <div style="position: relative">
+      <div id="map"></div>
+      <div class="find-address">
+        <input
+          type="text"
+          placeholder="найти адрес"
+          class="find-address-input"
+        />
+        <input
+          type="text"
+          placeholder="найти адрес"
+          class="find-addresses-input"
+          style="display: none"
+        />
+        <svg viewBox="0 0 15 15" xmlns="http://www.w3.org/2000/svg">
+          <circle
+            cx="6.5"
+            cy="6.5"
+            r="5.875"
+            fill="none"
+            stroke-width="1.25"
+          ></circle>
+          <path d="M14 14L11 11" fill="none" stroke-width="1.25"></path>
+        </svg>
+        <div class="dropdown">
+          <div>Test</div>
+          <div>Test</div>
+        </div>
+      </div>
+    </div>
+    <div class="select-wrapper">
+      <div class="header">
+        <h3>
+          выбор <br />
+          пункта выдачи
+        </h3>
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path d="M2 2L18 18" fill="none" stroke-width="1.5"></path>
+          <path d="M2 18L18 2" fill="none" stroke-width="1.5"></path>
+        </svg>
+      </div>
+      <button class="select-delivery-type">
+        <div class="select-delivery-type-value">Почта россии</div>
+        <svg
+          width="15"
+          height="15"
+          viewBox="0 0 15 15"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path d="M3 5L7.5 9.5L12 5" fill="none" stroke-width="1.5"></path>
+        </svg>
+        <div class="dropdown">
+          <div class="select-delivery-type-opt" data-type="Почта россии">
+            Почта россии
+          </div>
+          <div class="select-delivery-type-opt" data-type="Boxberry">
+            Boxberry
+          </div>
+          <div class="select-delivery-type-opt" data-type="СДЭК">СДЭК</div>
+        </div>
+      </button>
+      <div class="list-wrapper"></div>
+    </div>
+    <script
+      src="https://apis.google.com/js/platform.js?onload=triggerGoogleLoaded"
+      defer
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"
+      defer
+    ></script>
+    <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
+    <script
+      async
+      defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAygbD67n00EoRcHC5ca-sPqsSbBaEdvrg&callback=initMap&libraries=places"
+    ></script>
+    <script src="./assets/scripts/script.js"></script>
+  </body>
+</html>
