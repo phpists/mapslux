@@ -74,6 +74,42 @@
         </div>
       </button>
       <div class="list-wrapper"></div>
+      <div class="overlay overlay-order"></div>
+      <div class="overlay overlay-loading">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          style="
+            margin: auto;
+            background: none;
+            display: block;
+            shape-rendering: auto;
+          "
+          width="200px"
+          height="200px"
+          viewBox="0 0 100 100"
+          preserveAspectRatio="xMidYMid"
+        >
+          <circle
+            cx="50"
+            cy="50"
+            fill="none"
+            stroke="#0a0a0a"
+            stroke-width="10"
+            r="35"
+            stroke-dasharray="164.93361431346415 56.97787143782138"
+          >
+            <animateTransform
+              attributeName="transform"
+              type="rotate"
+              repeatCount="indefinite"
+              dur="1s"
+              values="0 50 50;360 50 50"
+              keyTimes="0;1"
+            />
+          </circle>
+        </svg>
+      </div>
     </div>
     <script
       src="https://apis.google.com/js/platform.js?onload=triggerGoogleLoaded"
@@ -85,7 +121,6 @@
     ></script>
     <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
     <script
-      async
       defer
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAygbD67n00EoRcHC5ca-sPqsSbBaEdvrg&callback=initMap&libraries=places"
     ></script>

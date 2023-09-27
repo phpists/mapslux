@@ -2,6 +2,41 @@ const API_KEY = "AIzaSyAygbD67n00EoRcHC5ca-sPqsSbBaEdvrg";
 let delivery_type = "Почта россии";
 let map;
 
+const handleToggleLoading = (type = true) => {
+  const loader = document.querySelector(".overlay-loading");
+  loader.classList.toggle("active", type);
+};
+
+const handleRenderOrderModal = (title, address) => {
+  const modal = document.querySelector(".overlay-order");
+  const content = `
+    <div class="modal">
+        <svg
+            width="20"
+            height="20"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+            class="closeBtn"
+        >
+            <path d="M2 2L18 18" fill="none" stroke-width="1.5"></path>
+            <path d="M2 18L18 2" fill="none" stroke-width="1.5"></path>
+        </svg>
+        <div class="pickup-item__title">${title ?? ""}</div>
+        <div class="pickup-item__address">
+            <div class="pickup-item__text"> ${address ?? ""}</div>
+        </div>
+        <button class="submit">Привезти сюда</button>
+    </div>
+  `;
+
+  modal.innerHTML = "";
+  modal.innerHTML = content;
+  const closeBtn = document.querySelector(".overlay-order .closeBtn");
+  modal.classList.add("active");
+
+  closeBtn.addEventListener("click", () => modal.classList.remove("active"));
+};
+
 const handleSelectPost = (id) => {
   const pickupCards = document.querySelectorAll(".pickup-item");
   const listWrapper = document.querySelector(".list-wrapper");
@@ -89,6 +124,19 @@ const handleRenderMarkers = (map, places) => {
   setMarkers(map, filteredPoints);
 };
 
+const handleOrder = () => {
+  const buttons = document.querySelectorAll(".pickup-item__button");
+
+  buttons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const id = btn.getAttribute("data-id");
+      const title = btn.getAttribute("data-title");
+      const address = btn.getAttribute("data-address");
+
+      handleRenderOrderModal(title, address);
+    });
+  });
+};
 
 const handleFormatPickupCard = (place) =>
   `
@@ -106,7 +154,12 @@ const handleFormatPickupCard = (place) =>
               place.isOpen ? "Открыт" : "Закрыт"
             }</b>
         </div>
-        <button class="pickup-item__button">Привезти сюда</button>
+        <button 
+            class="pickup-item__button" 
+            data-id="${place.place_id}" 
+            data-title="${place?.name ?? ""}"
+            data-address="${place?.formatted_address ?? ""}" 
+        >Привезти сюда</button>
         </div>
     </div>
     `;
@@ -124,9 +177,12 @@ const handleFormatPlaces = (places) => {
 
   listWrapper.innerHTML = cards;
   handleClickOnPickItem();
+  handleToggleLoading(false);
+  handleOrder();
 };
 
 const handleGetPlacePlaces = async (query, map, clear) => {
+  handleToggleLoading(true);
   let places = [];
   const request = {
     query: `${query} ${delivery_type}`,

@@ -265,3 +265,74 @@ button {
 .pickup-item.active .more-content {
   display: block;
 }
+
+.overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: rgba(255, 255, 255, 0.6);
+  z-index: 100;
+  backdrop-filter: blur(1px) grayscale(1);
+  transition: all 0.3s;
+  visibility: hidden;
+  opacity: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.overlay.active {
+  visibility: visible;
+  opacity: 1;
+}
+
+.overlay-loading svg {
+  height: 100px;
+  width: 100px;
+}
+
+.modal {
+  padding: 20px;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+  max-width: 400px;
+  width: 100%;
+  position: relative;
+}
+
+.submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  border: 0;
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: 1.4px;
+  cursor: pointer;
+  height: 50px;
+  line-height: 50px;
+  color: #fff;
+  background: #000;
+  transition: all 0.3s;
+  font-weight: 600;
+}
+
+.modal svg {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: block;
+  fill: #000;
+  stroke: #000;
+  -webkit-transition-property: fill, stroke;
+  transition-property: fill, stroke;
+  -webkit-transition-duration: 0.3s;
+  transition-duration: 0.3s;
+  cursor: pointer;
+}
