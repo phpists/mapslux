@@ -265,3 +265,7 @@ button {
 .pickup-item.active .more-content {
   display: block;
 }
+
+.ymaps-2-1-79-search.ymaps-2-1-79-search_layout_normal.ymaps-2-1-79-searchbox__normal-layout {
+  display: none;
+}

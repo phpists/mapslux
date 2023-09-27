@@ -9,6 +9,7 @@
   </head>
   <body style="display: flex">
     <div style="position: relative">
+        <input type="hidden" name="" id="area">
       <div id="map"></div>
       <div class="find-address">
         <input
@@ -32,7 +33,7 @@
           ></circle>
           <path d="M14 14L11 11" fill="none" stroke-width="1.25"></path>
         </svg>
-        <div class="dropdown">
+        <div class="dropdown" id="suggest_location">
           <div>Test</div>
           <div>Test</div>
         </div>
@@ -64,8 +65,8 @@
         >
           <path d="M3 5L7.5 9.5L12 5" fill="none" stroke-width="1.5"></path>
         </svg>
-        <div class="dropdown">
-          <div class="select-delivery-type-opt" data-type="Почта россии">
+        <div class="dropdown" id="post_offices">
+          <div class="select-delivery-type-opt active" data-type="Почта россии">
             Почта россии
           </div>
           <div class="select-delivery-type-opt" data-type="Boxberry">
