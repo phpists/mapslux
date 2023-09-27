@@ -108,14 +108,12 @@ const loadDeliveryPlaces = async () => {
     if (location_name === '' || location_name ==null) {
         return;
     }
-    console.log(location_name)
     let location = ymaps.geocode(location_name, {
         kind: 'locality',
         results: 10
     });
     location.then((res) => {
         let boundaries = res.geoObjects.get(0).properties.get('boundedBy');
-        console.log(boundaries)
         let center = res.geoObjects.get(0).geometry.getCoordinates();
         myMap.setCenter(center, 10, {
             duration: 500
