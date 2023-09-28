@@ -47,9 +47,20 @@ function searchInit() {
     input.addEventListener('input', handleSearch);
 }
 
-const handleFormatPickupCard = (place) =>
+const handleOfficeZoom = () => {
+    document.querySelectorAll('.pickup-item').forEach((el) => {
+        el.addEventListener('click', () => {
+            let center = el.dataset.value.split(',');
+            myMap.setCenter(center, 15, {
+                duration: 500
+            });
+        })
+    })
+}
+
+const handleFormatPickupCard = (place, coordinates) =>
     `
-    <div class="pickup-item" data-id="${place?.id}">
+    <div class="pickup-item" data-id="${place?.id}" data-value="${coordinates[1] + ',' + coordinates[0]}">
         <div class="pickup-item__title">${place?.name ?? ""}</div>
         <div class="pickup-item__address">
             <div class="pickup-item__text">${
@@ -81,7 +92,7 @@ function setMarker(post_office){
 function displayPlaces(places, clearArea) {
     let cards = places.data.features.map((el) => {
         setMarker(el);
-        return handleFormatPickupCard(el.properties.CompanyMetaData);
+        return handleFormatPickupCard(el.properties.CompanyMetaData, el.geometry.coordinates);
     })
 
     const listWrapper = document.querySelector(".list-wrapper");
@@ -116,6 +127,9 @@ async function findPlaces(boundaries, count=0, clearArea=true) {
     let getNumber = parseInt(res.data.properties.ResponseMetaData.SearchResponse.found);
     if (getNumber > count) {
         await findPlaces(boundaries, count, false);
+    }
+    else  {
+        handleOfficeZoom()
     }
 }
 
