@@ -69,7 +69,6 @@ const handleFormatPickupCard = (place) =>
 `;
 
 function setMarker(post_office){
-    console.log(post_office)
     post_office_coordinates = post_office.geometry.coordinates;
     let myGeoObject = new ymaps.Placemark(
         [post_office_coordinates[1], post_office_coordinates[0]],
@@ -79,9 +78,25 @@ function setMarker(post_office){
     myMap.geoObjects.add(myGeoObject);
 }
 
-async function findPlaces(boundaries) {
+function displayPlaces(places, clearArea) {
+    let cards = places.data.features.map((el) => {
+        setMarker(el);
+        return handleFormatPickupCard(el.properties.CompanyMetaData);
+    })
+
+    const listWrapper = document.querySelector(".list-wrapper");
+    if (clearArea === true) {
+        listWrapper.innerHTML = cards.join('');
+    }
+    else {
+        listWrapper.innerHTML = listWrapper.innerHTML + cards.join('');
+    }
+    handleClickOnPickItem();
+}
+
+async function findPlaces(boundaries, count=0, clearArea=true) {
     let post_office = document.querySelector('.select-delivery-type-opt.active');
-    axios.get('https://search-maps.yandex.ru/v1/', {
+    let res = await axios.get('https://search-maps.yandex.ru/v1/', {
         params: {
             apikey: SEARCH_API_KEY,
             text: post_office.dataset.type,
@@ -89,18 +104,19 @@ async function findPlaces(boundaries) {
             lang: 'ru_RU',
             bbox: boundaries,
             rspn: 1,
-            results: 50
+            results: 50,
+            skip: count
         }
-    }).then((res) => {
+    });
+    if (count === 0) {
         myMap.geoObjects.removeAll();
-        let cards = res.data.features.map((el) => {
-            setMarker(el);
-            return handleFormatPickupCard(el.properties.CompanyMetaData);
-        })
-        const listWrapper = document.querySelector(".list-wrapper");
-        listWrapper.innerHTML = cards.join('');
-        handleClickOnPickItem();
-    })
+    }
+    count += 50;
+    displayPlaces(res, clearArea);
+    let getNumber = parseInt(res.data.properties.ResponseMetaData.SearchResponse.found);
+    if (getNumber > count) {
+        await findPlaces(boundaries, count, false);
+    }
 }
 
 const loadDeliveryPlaces = async () => {
