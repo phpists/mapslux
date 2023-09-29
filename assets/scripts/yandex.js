@@ -128,6 +128,20 @@ const handleFormatPickupCard = (place, coordinates) =>
     </div>
 `;
 
+function handleClickBaloon(post_office_id) {
+    const listWrapper = document.querySelector(".list-wrapper");
+
+    document.querySelector('.pickup-item.active')?.classList.toggle('active');
+    let selectedBaloon = document.querySelector(`.pickup-item[data-id='${post_office_id}']`);
+
+    selectedBaloon?.classList.toggle('active')
+
+    listWrapper.scroll({
+        top: selectedBaloon?.offsetTop - 200,
+        behavior: "smooth",
+    });
+}
+
 function setMarker(post_office){
     post_office_coordinates = post_office.geometry.coordinates;
     let myGeoObject = new ymaps.Placemark(
@@ -135,6 +149,9 @@ function setMarker(post_office){
         {balloonContent: `<h2>${post_office.properties.CompanyMetaData.name}</h2><h3>${post_office.properties.CompanyMetaData.address}</h3><p>${post_office.properties.CompanyMetaData.Hours?.text}</p>`},
         { preset: 'islands#icon', iconColor:'#0095b6' }
     );
+    myGeoObject.events.add('click', () => {
+        handleClickBaloon(post_office.properties.CompanyMetaData.id);
+    })
     myMap.geoObjects.add(myGeoObject);
 }
 
