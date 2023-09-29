@@ -197,7 +197,7 @@ const loadDeliveryPlaces = async () => {
         let boundaries = res.geoObjects.get(0).properties.get('boundedBy');
         let center = res.geoObjects.get(0).geometry.getCoordinates();
         myMap.setCenter(center, 10, {
-            duration: 500
+            
         });
         const border = (boundaries[0][1] + ',' + boundaries[0][0])
             + '~'
@@ -229,9 +229,12 @@ async function handleSearch(ev) {
         prompt.innerHTML = "";
         res.data.results.forEach((el) => {
             let elData = document.createElement('div');
-            elData.innerText = el.title.text;
+            elData.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512">
+            <!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+            <path d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"/>
+            </svg> <span>${el.title.text}</span>`;
             elData.classList.add('location_item');
-            elData.dataset.value = elData.innerText;
+            elData.dataset.value = el.title.text;
             prompt.appendChild(elData);
             locationItemInit(elData);
         });
@@ -239,14 +242,23 @@ async function handleSearch(ev) {
     })
 }
 
+function initDeliveryOptions() {
+    const select = document.querySelector(".select-delivery-type");
+    document.querySelectorAll('.select-delivery-type-opt').forEach((el) => {
+        let delivery_value = document.querySelector('.select-delivery-type-value');
+        el.addEventListener('click', async () => {
+            document.querySelector('.select-delivery-type-opt.active').classList.toggle('active');
+            el.classList.toggle('active');
+            delivery_value.innerText = el.dataset.type;
+            select.blur();
+            handleToggleLoading(true);
+            await loadDeliveryPlaces();
+        });
+    })
+}
 
-searchInit()
-document.querySelectorAll('.select-delivery-type-opt').forEach((el) => {
-    let delivery_value = document.querySelector('.select-delivery-type-value');
-    el.addEventListener('click', async () => {
-        document.querySelector('.select-delivery-type-opt.active').classList.toggle('active');
-        el.classList.toggle('active');
-        delivery_value.innerText = el.dataset.type;
-        await loadDeliveryPlaces();
-    });
+
+document.addEventListener('DOMContentLoaded', () => {
+    searchInit()
+    initDeliveryOptions();
 })

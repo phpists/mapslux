@@ -340,3 +340,23 @@ button {
   transition-duration: 0.3s;
   cursor: pointer;
 }
+
+.location_item {
+  border-bottom: 1px solid #e6e6e6;
+}
+
+.location_item svg {
+  display: inline;
+  height: 12px;
+  width: 12px;
+  margin-left: 10px;
+  margin-right: 5px;
+}
+
+.location_item span {
+  font-size: 12px;
+}
+
+.dropdown#suggest_location {
+  top: 110%;
+}
