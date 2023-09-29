@@ -17,6 +17,55 @@ function initYandex(){
 
 ymaps.ready(initYandex);
 
+const handleRenderOrderModal = (title, address) => {
+    const modal = document.querySelector(".overlay-order");
+    const content = `
+      <div class="modal">
+          <svg
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+              class="closeBtn"
+          >
+              <path d="M2 2L18 18" fill="none" stroke-width="1.5"></path>
+              <path d="M2 18L18 2" fill="none" stroke-width="1.5"></path>
+          </svg>
+          <div class="pickup-item__title">${title ?? ""}</div>
+          <div class="pickup-item__address">
+              <div class="pickup-item__text"> ${address ?? ""}</div>
+          </div>
+          <button class="submit">Привезти сюда</button>
+      </div>
+    `;
+  
+    modal.innerHTML = "";
+    modal.innerHTML = content;
+    const closeBtn = document.querySelector(".overlay-order .closeBtn");
+    modal.classList.add("active");
+  
+    closeBtn.addEventListener("click", () => modal.classList.remove("active"));
+  };
+
+  const handleToggleLoading = (type = true) => {
+    const loader = document.querySelector(".overlay-loading");
+    loader.classList.toggle("active", type);
+  };
+
+  const handleOrder = () => {
+    const buttons = document.querySelectorAll(".pickup-item__button");
+  
+    buttons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const id = btn.getAttribute("data-id");
+        const title = btn.getAttribute("data-title");
+        const address = btn.getAttribute("data-address");
+  
+        handleRenderOrderModal(title, address);
+      });
+    });
+  };
+
 const handleSelectPost = (id) => {
     const pickupCards = document.querySelectorAll(".pickup-item");
     const listWrapper = document.querySelector(".list-wrapper");
@@ -74,7 +123,7 @@ const handleFormatPickupCard = (place, coordinates) =>
         place?.isOpen ? "Открыт" : "Закрыт"
     }</b>
         </div>
-        <button class="pickup-item__button">Привезти сюда</button>
+        <button class="pickup-item__button" data-id="${place?.id}" data-title="${place?.name}" data-address="${place?.address}">Привезти сюда</button>
         </div>
     </div>
 `;
@@ -83,7 +132,7 @@ function setMarker(post_office){
     post_office_coordinates = post_office.geometry.coordinates;
     let myGeoObject = new ymaps.Placemark(
         [post_office_coordinates[1], post_office_coordinates[0]],
-        {balloonContent: `<h2>${post_office.properties.CompanyMetaData.name}</h2><p>${post_office.properties.CompanyMetaData.Hours?.text}</p>`},
+        {balloonContent: `<h2>${post_office.properties.CompanyMetaData.name}</h2><h3>${post_office.properties.CompanyMetaData.address}</h3><p>${post_office.properties.CompanyMetaData.Hours?.text}</p>`},
         { preset: 'islands#icon', iconColor:'#0095b6' }
     );
     myMap.geoObjects.add(myGeoObject);
@@ -102,6 +151,7 @@ function displayPlaces(places, clearArea) {
     else {
         listWrapper.innerHTML = listWrapper.innerHTML + cards.join('');
     }
+    handleOrder();
     handleClickOnPickItem();
 }
 
@@ -129,7 +179,8 @@ async function findPlaces(boundaries, count=0, clearArea=true) {
         await findPlaces(boundaries, count, false);
     }
     else  {
-        handleOfficeZoom()
+        handleOfficeZoom();
+        handleToggleLoading(false);
     }
 }
 
@@ -160,6 +211,7 @@ function locationItemInit(el) {
         document.querySelector('.find-address-input').value = el.dataset.value;
         let prompt = document.getElementById('suggest_location');
         prompt.innerHTML = "";
+        handleToggleLoading(true);
         await loadDeliveryPlaces();
     })
 }
